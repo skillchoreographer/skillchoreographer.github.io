@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choreographer</title>
+    <!-- Bulma CSS  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <!-- Font Awesome icons  -->
+    <script src="https://kit.fontawesome.com/b165665cab.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container p-3 is-primary">
+        <!-- Title section -->
+        <div class="block is-center has-text-centered">
+            <h1 class="title is-1 is-spaced">Choreographer: Learning and <br /> Adapting Skills in Imagination</h1>
+
+            <div class="columns is-mobile is-centered is-multiline">
+                <div class="column is-one-third-mobile is-narrow-desktop">
+                    <figure class="image container is-96x96">
+                        <img class="is-rounded" src="./resources/avatars/pietro_mazzaglia.png">
+                    </figure>
+                    <p class="subtitle is-5"> Pietro Mazzaglia</p>
+                </div>
+                <div class="column is-one-third-mobile is-narrow-desktop">
+                    <figure class="image container is-96x96">
+                        <img class="is-rounded" src="./resources/avatars/tim_verbelen.jpg">
+                    </figure>
+                    <p class="subtitle is-5"> Tim Verbelen</p>
+                </div>
+                <div class="column is-one-third-mobile is-narrow-desktop">
+                    <figure class="image container is-96x96">
+                        <img class="is-rounded" src="./resources/avatars/bart_dhoedt.jpeg">
+                    </figure>
+                    <p class="subtitle is-5"> Bart Dhoedt</p>
+                </div>
+                <div class="column is-one-third-mobile is-narrow-desktop">
+                    <figure class="image container is-96x96">
+                        <img class="is-rounded" src="./resources/avatars/alex_lacoste.jpg">
+                    </figure>
+                    <p class="subtitle is-5"> Alexandre Lacoste</p>
+                </div>
+                <div class="column is-one-third-mobile is-narrow-desktop">
+                    <figure class="image container is-96x96">
+                        <img class="is-rounded" src="./resources/avatars/sai_rajeswar.png">
+                    </figure>
+                    <p class="subtitle is-5"> Sai Rajeswar</p>
+                </div>
+            </div>
+            <!-- <h2 class="subtitle is-3">Pietro Mazzaglia, Tim Verbelen, Bart Dhoedt, Alexandre Lacoste, Sai Rajeswar</h1> -->
+            <a class="button is-rounded" href="https://openreview.net/pdf?id=BxYsP-7ggf">
+                <span class="icon is-small"><i class="fa-regular fa-file-pdf" aria-hidden="true"></i></span>
+                <span>Read the article</span>
+            </a>
+            <a class="button is-rounded">
+                <span class="icon is-small"><i class="fa-brands fa-github" aria-hidden="true"></i></span>
+                <span>Code (coming soon)</span>
+            </a>
+
+            <br />
+            <br />
+
+            <div class="columns is-centered is-mobile">
+                <div class="column is-full-mobile is-two-thirds-tablet is-half-desktop">
+                    <figure class="image">
+                        <img src="./resources/choreo_dance.png" />
+                    </figure>
+                </div>
+            </div>
+        </div>
+
+        <!-- Abstract -->
+        <div class="block box">
+            <h2 class="title is-3"> Abstract </h2>
+            <p class="is-size-5">
+                Unsupervised skill learning aims to learn a rich repertoire of behaviors without external supervision,
+                providing artificial agents with the ability to control and influence the environment. However, without
+                appropriate knowledge and exploration, skills may provide control only over a restricted area of the
+                environment,
+                limiting their applicability. Furthermore, it is unclear how to leverage the learned skill behaviors for
+                adapting to downstream tasks in a data-efficient manner. We present Choreographer, a model-based agent
+                that exploits its world model to learn and adapt skills in imagination. Our method decouples the
+                exploration and skill learning processes, being able to discover skills in the latent state space of the
+                model. During adaptation, the agent uses a meta-controller to evaluate and adapt the learned skills
+                efficiently by deploying them in parallel in imagination. Choreographer is able to learn skills both
+                from offline data, and by collecting data simul-
+                taneously with an exploration policy. The skills can be used to effectively adapt to downstream tasks,
+                as we show in the URL benchmark, where we outperform
+                previous approaches from both pixels and states inputs. The learned skills also explore the environment
+                thoroughly, finding sparse rewards more frequently, as
+                shown in goal-reaching tasks from the DMC Suite and Meta-World.
+            </p>
+        </div>
+
+        <br />
+
+        <!-- Choreographer -->
+        <div class="block box is-size-4">
+            <h2 class="title is-3"> Choreographer </h2>
+            <div class="block box">
+                <h3 class="subtitle is-3"> World model </h2>
+                    <div class="content">
+                        <ul>
+                            <li>The agent learns a generative world model, by reconstructing environment observations.
+                            </li>
+                            <li>The world model is used to generate imaginary trajectories in model state space.</li>
+                        </ul>
+                    </div>
+                    <figure class="image">
+                        <img src="./resources/choreo-imagine.gif" alt="world model imagines trajectory">
+                    </figure>
+            </div>
+            <div class="block box">
+                <h3 class="subtitle is-3"> Skill discovery </h2>
+                    <div class='columns is-vcentered'>
+                        <div class="content column">
+                            <ul class="is-flex-direction-column">
+                                <li>Skills are discovered via representation learning with a VQ-VAE on top of the world
+                                    model states.</li>
+                                <br>
+                                <li>The VQ-VAE codebook clusterizes the model state space into N different clusters.
+                                </li>
+                                <br>
+                                <li>Each code represents a skill. The N skills learned correspond with the N centroids
+                                    of the clusters.</li>
+                            </ul>
+                        </div>
+                        <figure class="image column is-one-third">
+                            <img src="./resources/skill_discovery.svg" alt="world model imagines trajectory">
+                        </figure>
+                    </div>
+            </div>
+            <div class="block box">
+                <h3 class="subtitle is-3"> Skill learning </h2>
+                    <div class="content">
+                        <ul>
+                            <li>A skill policy for each code is learned in the agent model’s imagination.</li>
+                            <li>Skill policies reach their corresponding code states and maximize state entropy.</li>
+                        </ul>
+                    </div>
+                    <figure class="image">
+                        <img src="./resources/skill_learning.svg" alt="world model imagines trajectory">
+                    </figure>
+            </div>
+            <div class="block box">
+                <h3 class="subtitle is-3"> Skill adaptation </h2>
+                    <div class="content">
+                        <ul>
+                            <li>To adapt for downstream tasks, a meta-controller selects which skills to employ and
+                                adapt.
+                            </li>
+                            <li>Skills are evaluated and fine-tuned in the model’s imagination.</li>
+                        </ul>
+                    </div>
+                    <figure class="image">
+                        <img src="./resources/skill_adaptation.svg" alt="world model imagines trajectory">
+                    </figure>
+            </div>
+        </div>
+        <br />
+
+        <!-- Skill visualization -->
+        <div class="block box is-size-4">
+            <h2 class="title is-3"> Skill visualization </h2>
+            <div class="content">
+                We display the skill codes and policies learned by Choreographer. For each skill, we show:
+                <ul>
+                    <li>
+                        <strong>Top:</strong> the state corresponding to the skill, reconstructed in image space;
+                    </li>
+                    <li>
+                        <strong>Bottom:</strong> The skill policy behavior, deployed in the environment for 100 steps.
+                    </li>
+                </ul>
+            </div>
+            <div class="block box">
+                <p class="subtitle is-3"> Walker </p>
+                <div class="columns is-mobile is-centered is-multiline is-1 is-variable">
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/walker/19.png" alt="walker code reconstruction" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/walker/19.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/walker/27.png" alt="walker code reconstruction" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/walker/27.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/walker/0.png" alt="walker code reconstruction" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/walker/0.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/walker/38.png" alt="walker code reconstruction" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/walker/38.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/walker/48.png" alt="walker code reconstruction" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/walker/48.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/walker/58.png" alt="walker code reconstruction" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/walker/58.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/walker/17.png" alt="walker code reconstruction" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/walker/17.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/walker/63.png" alt="walker code reconstruction" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/walker/63.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="block box">
+                <p class="subtitle is-3"> Quadruped </p>
+                <div class="columns is-mobile is-centered is-multiline is-1 is-variable">
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/quadruped/7.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/quadruped/7.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/quadruped/10.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/quadruped/10.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/quadruped/18.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/quadruped/18.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/quadruped/33.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/quadruped/33.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/quadruped/46.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/quadruped/46.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/quadruped/55.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/quadruped/55.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/quadruped/60.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/quadruped/60.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/quadruped/63.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/quadruped/63.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="block box">
+                <p class="subtitle is-3"> Jaco </p>
+                <div class="columns is-mobile is-centered is-multiline is-1 is-variable">
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/jaco/1.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/jaco/1.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/jaco/2.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/jaco/2.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/jaco/3.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/jaco/3.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/jaco/22.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/jaco/22.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/jaco/23.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/jaco/23.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/jaco/37.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/jaco/37.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/jaco/40.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/jaco/40.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/jaco/56.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/jaco/56.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="block box">
+                <p class="subtitle is-3"> Meta-World </p>
+                <div class="columns is-mobile is-centered is-multiline is-1 is-variable">
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/mw/7.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/mw/7.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/mw/9.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/mw/9.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/mw/19.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/mw/19.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/mw/29.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/mw/29.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/mw/40.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/mw/40.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/mw/51.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/mw/51.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/mw/56.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/mw/56.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                    <div class="column is-one-quarter-mobile">
+                        <figure class="image">
+                            <img src="./resources/codes/mw/60.png" alt="this slowpoke moves" />
+                        </figure>
+                        <figure class="image">
+                            <img src="./resources/gifs/mw/60.gif" alt="this slowpoke moves" />
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="block box is-size-5">
+            <h2 class="title is-3"> Citation </h2>
+            <div class="content notification">
+                @inproceedings{ <br />
+                &nbsp; &nbsp; &nbsp; &nbsp; Mazzaglia2022Choreographer, <br />
+                &nbsp; &nbsp; &nbsp; &nbsp; title={Choreographer: Learning and Adapting Skills in Imagination}, <br />
+                &nbsp; &nbsp; &nbsp; &nbsp; author={Pietro Mazzaglia, Tim Verbelen, Bart Dhoedt, Alexandre Lacoste, Sai
+                Rajeswar}, <br />
+                &nbsp; &nbsp; &nbsp; &nbsp; year={2022}, <br />
+                &nbsp; &nbsp; &nbsp; &nbsp; url={https://openreview.net/forum?id=BxYsP-7ggf} <br />
+                } <br />
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer pt-5 pb-5">
+        <div class="content has-text-centered">
+            <p>
+                Website created by
+                <a href="https://mazpie.github.io"><strong>Pietro Mazzaglia</strong></a>.
+                <br />
+                <br />
+                You are free to borrow the source code,
+                but please link back to this page in your footer <br />
+                (and remember to remove the analytics code included in the header of the website).
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
