@@ -7,11 +7,12 @@ You can read our article [here](https://openreview.net/pdf?id=BxYsP-7ggf).
 Please cite the work using:
 ```
 @inproceedings{
-    Mazzaglia2022Choreographer,
-    title={Choreographer: Learning and Adapting Skills in Imagination},
-    author={Pietro Mazzaglia, Tim Verbelen, Bart Dhoedt, Alexandre Lacoste, Sai Rajeswar},
-    year={2022},
-    url={https://openreview.net/forum?id=BxYsP-7ggf}
+        Mazzaglia2023Choreographer,
+        title={Choreographer: Learning and Adapting Skills in Imagination},
+        author={Pietro Mazzaglia and Tim Verbelen and Bart Dhoedt and Alexandre Lacoste and Sai Rajeswar},
+        booktitle={International Conference on Learning Representations},
+        year={2023},
+        url={https://openreview.net/forum?id=PhkWyijGi5b}
 }
 ```
 
